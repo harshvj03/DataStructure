@@ -1,109 +1,80 @@
-#include<iostream>
+#include <iostream>
 
 using namespace std;
 
-
-
-void merge(int arr[],int l,int m,int r)
+void merge(int *arr,int low,int high,int mid)
 {
-	int i,j,k;
+	int i,j,k,*temp;
+	temp = new int[high-low+1];
+	i=low;
+	j = mid+1;
+	k=0;
 
-	int n1 = m-l+1;
-
-	int n2 = r-m;
-
-
-	int L[n1],R[n2];
-
-	for(i=0;i<n1;i++)
+	while(i<=mid && j<=high)
 	{
-		L[i] = arr[l+i];
-	}
-
-	for(j=0;j<n2;j++)
-	{
-		R[i] = arr[m+1+j];
-	}
-
-
-	i=0;j=0;k=l;
-
-	while(i<n1 && j<n2)
-	{
-		if(L[i] <= R[j])
+		if(arr[i] < arr[j])
 		{
-			arr[k] = L[i];
+			temp[k] = arr[i];
 			i++;
+			k++;
 		}
-		else 
+		else
 		{
-			arr[k] = R[j];
+			temp[k] = arr[j];
 			j++;
+			k++;
 		}
-		k++;
 	}
-
-	while(i < n1)
+	while(i<=mid)
 	{
-		arr[k] = L[i];
+		temp[k]=arr[i];
 		i++;
 		k++;
 	}
-
-	while(j<n2)
+	while(j<=high)
 	{
-		arr[k] = R[j];
+		temp[k] = arr[j];
 		j++;
 		k++;
+
 	}
 
-}
-
-
-void mergesort(int arr[],int l,int r)
-{
-	if(l<r)
+	for(i=low;i<=high;i++)
 	{
-		int m = (l+r)/2;
-
-		mergesort(arr,l,m);
-		mergesort(arr,m+1,r);
-
-		merge(arr,l,m,r);
+		arr[i] = temp[i-low];
 	}
 }
 
 
-void PrintArray(int arr[],int size)
+void mergesort(int *arr,int low,int high)
 {
+	int mid;
+	mid = (low+high)/2;
+
+	if(low<high)
+	{
+		mergesort(arr,low,mid);
+		mergesort(arr,mid+1,high);
+		merge(arr,low,high,mid);
+
+	}
+}
+
+
+int main()
+{
+
 	int i;
-	for(i=0;i<size;i++)
+
+	int arr[10] = {2,12,4,23,5,35,53,9,90,11};
+
+	mergesort(arr,0,9);
+
+	for(i=0;i<10;i++)
 	{
-		cout << arr[i]<<"\n";
-	}
-}
-
-
-int main(){
-
-	int n;
-	cout <<"Enter no. of elements : ";
-	cin >> n;
-
-	int arr[n];
-
-	cout << "Enter elements of array : ";
-	for(int i =0 ; i<n;i++)
-	{
-		cin >> arr[i];
+		cout << arr[i]<< " ";
 	}
 
-	mergesort(arr,0,n-1);
 
-	PrintArray(arr,n);
-	
 
 }
-
-
-
